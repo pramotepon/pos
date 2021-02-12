@@ -3,5 +3,6 @@ require('dotenv').config();
 
 // Exports ข้อมูลที่เราต้องการส่งออกจากใน .env
 module.exports = {
-    PORT: process.env.PORT
+    PORT: process.env.PORT,
+    DOMAIN: process.env.DOMAIN
 }
