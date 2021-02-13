@@ -1,15 +1,28 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+// import mongoose
+const mongoose = require('mongoose');
+// import env
+const config = require('./config/index')
 
 // import error middleware
 const errorHandler = require('./middleware/errorHandler');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const staffRouter = require('./routes/staffs');
 
-var app = express();
+const app = express();
+
+// connect mongodb
+mongoose.connect(config.MONGO_DB,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+});
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -19,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/staff', staffRouter);
 
 // สั่งใช้งาน error middleware ที่เรา Import เข้ามา
 app.use(errorHandler);
