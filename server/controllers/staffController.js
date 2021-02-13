@@ -96,7 +96,7 @@ exports.updateStaff = async (req, res, next) => {
         next(error);
     }
 }
-
+// delete Staff
 exports.deleteStaff = async (req, res, next) => {
     try {
         const { id } = req.params;
