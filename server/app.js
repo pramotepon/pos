@@ -14,6 +14,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const staffRouter = require('./routes/staffs');
 const productRouter = require('./routes/products');
+const receiptRouter = require('./routes/receipts');
 
 const app = express();
 
@@ -36,7 +37,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/staff', staffRouter);
-app.use('/product', productRouter)
+app.use('/product', productRouter);
+app.use('/receipt', receiptRouter);
 
 // สั่งใช้งาน error middleware ที่เรา Import เข้ามา
 app.use(errorHandler);
