@@ -2,6 +2,11 @@ const Staff = require('../models/staff');
 // import express validator
 const { validationResult } = require('express-validator');
 
+// import json web token
+const jwt = require('jsonwebtoken');
+// import env config
+const config = require('../config/index');
+
 // select Staff
 exports.getStaff = async (req, res, next) => {
         const staffs = await Staff.find();
@@ -113,4 +118,73 @@ exports.deleteStaff = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
+}
+
+
+// login Staff
+exports.loginStaff = async (req, res, next) => {
+    // ครอบ Try catch
+    try {
+        // destruct email และ password
+        const { email, password } = req.body;
+        // ตรวจสอบ email ในระบบ
+        const staff = await Staff.findOne({ email: email });
+        // ถ้าไม่เจอให้ catch next error
+        if(!staff){
+            const error = new Error('ไม่มีผู้ใช้งานนี้');
+            error.statusCode = 404;
+            throw error;
+        }
+        // ตรวจสอบ รหัสผ่าน เรียกใช้ฟังก์ชั่นที่เราสร้างใน model
+        const isValid = await staff.checkPassword(password);
+        // ถ้าเป็น false ให้ catch next error
+        if(!isValid){
+            const error = new Error('รหัสผ่านไม่ถูกต้อง');
+            // 401 คือ un autho
+            error.statusCode = 401;
+            throw error;
+        }
+
+        // res.status(200).json({
+        //     message: "Login Success"
+        // });
+        
+        // เข้าสู่ระบบ
+        // สร้าง token
+        const token = await jwt.sign({
+            id: staff._id,
+            role: staff.role
+        }, config.JWT_SECRET, {
+            expiresIn: '5 days'
+        });
+
+        // decode exp
+        const expires_in = jwt.decode(token);
+        // ส่งข้อมูลออกไป
+        res.status(200).json({
+            // token ข้อมูล
+            access_token: token,
+            // วันหมดอายุของ token
+            expires_id: expires_in.exp,
+            // ประเภทของ token
+            token_type: 'Bearer'
+        });
+        
+    } catch (error) {
+        next(error);
+    }
+}
+
+exports.profileStaff = async (req, res, next) => {
+    // destruct data
+    const { _id, first_name, email, role } = req.staff;
+    // เรียกใช้แค่ข้อมูลที่ต้องการ
+    return res.status(200).json({
+        staff: {
+            id: _id,
+            first_name: first_name,
+            email: email,
+            role: role
+        }
+    });
 }

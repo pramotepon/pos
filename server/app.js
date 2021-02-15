@@ -9,6 +9,8 @@ const config = require('./config/index')
 
 // import error middleware
 const errorHandler = require('./middleware/errorHandler');
+// import passport ที่เราติดตั้ง
+const passport = require('passport');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -33,7 +35,8 @@ app.use(express.json({
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+// init passport
+app.use(passport.initialize());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/staff', staffRouter);

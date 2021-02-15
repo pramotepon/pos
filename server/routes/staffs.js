@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const staffController = require('../controllers/staffController');
 const { body } = require('express-validator');
-
+// import middleware passportJWT
+const passportJWT = require('../middleware/passportJWT');
 // select Staff
 router.get('/', staffController.getStaff);
 // insert Staff
@@ -19,5 +20,9 @@ router.get('/:id', staffController.findStaff);
 router.put('/:id', staffController.updateStaff);
 // delete staff by id
 router.delete('/:id', staffController.deleteStaff);
+// login Staff
+router.post('/login', staffController.loginStaff);
+// profile Staff
+router.get('/me', [passportJWT.isLogin], staffController.profileStaff);
 
 module.exports = router;

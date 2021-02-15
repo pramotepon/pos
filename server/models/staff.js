@@ -23,5 +23,13 @@ schema.methods.encryptPassword = async function(password){
     return hashPassword;
 }
 
+// สร้างฟังก์ชั่นเพื่อตรวจสอบ password
+schema.methods.checkPassword = async function(password){
+    // ใช้งาน bcrypt ใช้คำสั่ง compare(password ที่ login, password ที่ hash)
+    const isValid = await bcrypt.compare(password, this.password);
+    // คืนค่ากลับไป ถ้าตรงกัน true ถ้าไม่ false
+    return isValid;
+}
+
 const staff = mongoose.model('Staff', schema);
 module.exports = staff;
