@@ -12,7 +12,11 @@ const schema = Schema({
 })
 
 schema.virtual('total').get(function() {
-    return this.product_price.reduce(function(currentValue, previousValue){
+    let minus_total = [];
+    for (let index = 0; index < this.product_price.length; index++) {
+        minus_total.push(this.product_price[index] * this.product_num[index]);
+    } 
+    return minus_total.reduce(function(currentValue, previousValue){
         return (currentValue + previousValue);
     });
 });
