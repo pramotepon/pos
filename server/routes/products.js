@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
 const { body } = require('express-validator');
+const passportJWT = require('../middleware/passportJWT');
 
 // select Staff
-router.get('/', productController.getProduct);
+router.get('/', [passportJWT.isLogin], productController.getProduct);
 // find product by id
 router.get('/:id', productController.findProduct);
 // insert product

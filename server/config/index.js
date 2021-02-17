@@ -5,6 +5,6 @@ require('dotenv').config();
 module.exports = {
     PORT: process.env.PORT,
     DOMAIN: process.env.DOMAIN,
-    MONGO_DB: process.env.MONGO_DB,
+    MONGODB_URI: process.env.MONGODB_URI,
     JWT_SECRET: process.env.JWT_SECRET
 }

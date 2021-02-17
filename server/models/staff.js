@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 // เรียกใช้งานแพคเกจ Bcrypt.js
 const bcrypt = require('bcryptjs');
 
-const schema = mongoose.Schema({
-    email: { type: String, required: true, trim: true, unique: true },
+const schema = Schema({
+    email: { type: String, required: true, trim: true, unique: true, index: true },
     password: { type: String, required: true, trim: true},
     first_name: { type: String, required: true, trim: true },
     last_name: { type: String, required: true, trim: true },
-    role: { type: String, default: "staff" }
+    role: { type: String, default: 'staff' }
 },{
     collection: 'staffs',
     timestamps: true 

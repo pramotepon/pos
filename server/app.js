@@ -4,11 +4,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 // import mongoose
 const mongoose = require('mongoose');
-// import env
-const config = require('./config/index')
-
-// import error middleware
-const errorHandler = require('./middleware/errorHandler');
 // import passport ที่เราติดตั้ง
 const passport = require('passport');
 
@@ -17,11 +12,15 @@ const usersRouter = require('./routes/users');
 const staffRouter = require('./routes/staffs');
 const productRouter = require('./routes/products');
 const receiptRouter = require('./routes/receipts');
+// import env
+const config = require('./config/index')
+// import error middleware
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
 // connect mongodb
-mongoose.connect(config.MONGO_DB,{
+mongoose.connect(config.MONGODB_URI,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -37,6 +36,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // init passport
 app.use(passport.initialize());
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/staff', staffRouter);

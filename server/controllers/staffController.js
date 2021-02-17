@@ -1,10 +1,8 @@
 const Staff = require('../models/staff');
-// import express validator
 const { validationResult } = require('express-validator');
-
-// import json web token
 const jwt = require('jsonwebtoken');
-// import env config
+const uuidv4 = require('uuid'); // สำหรับ gen ชื่อไฟล์แบบสุ่มใหม่
+
 const config = require('../config/index');
 
 // select Staff
@@ -120,8 +118,6 @@ exports.deleteStaff = async (req, res, next) => {
     }
 }
 
-
-// login Staff
 exports.loginStaff = async (req, res, next) => {
     // ครอบ Try catch
     try {
@@ -145,10 +141,6 @@ exports.loginStaff = async (req, res, next) => {
             throw error;
         }
 
-        // res.status(200).json({
-        //     message: "Login Success"
-        // });
-        
         // เข้าสู่ระบบ
         // สร้าง token
         const token = await jwt.sign({
@@ -169,20 +161,19 @@ exports.loginStaff = async (req, res, next) => {
             // ประเภทของ token
             token_type: 'Bearer'
         });
-        
     } catch (error) {
         next(error);
     }
 }
 
-exports.profileStaff = async (req, res, next) => {
-    // destruct data
-    const { _id, first_name, email, role } = req.staff;
-    // เรียกใช้แค่ข้อมูลที่ต้องการ
+// select Staff
+exports.me = async (req, res, next) => {
+    // console.log(req);
+    const { _id, first_name, last_name, email, role } = req.user;
     return res.status(200).json({
-        staff: {
+        user: {
             id: _id,
-            first_name: first_name,
+            name: first_name + ' ' + last_name,
             email: email,
             role: role
         }

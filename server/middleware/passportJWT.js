@@ -10,6 +10,9 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = config.JWT_SECRET;
 // ข้อมูลที่ใส่รหัสไว้จะถูกส่งมาใน jwt_payload
 passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
+    // get the decoded payload and header
+    // console.log(config.JWT_SECRET);
+    // console.log(jwt_payload);
     try {
         // เรียกดูข้อมูล staff จาก _id ที่ถูกถอดรหัสแล้ว
         const staff = await Staff.findById(jwt_payload.id);
@@ -18,7 +21,6 @@ passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
         }
 
         return done(null, staff);
-        
     } catch (error) {
         done(error);
     }
